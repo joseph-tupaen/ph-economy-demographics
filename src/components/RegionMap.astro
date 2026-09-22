@@ -1,0 +1,118 @@
+---
+import mapData from "../data/regions-map.json";
+import { formatPeriod, latest, regions, snapshot } from "../lib/site.ts";
+
+type Point = [number, number];
+type Ring = Point[];
+type Geometry = { type: "Polygon" | "MultiPolygon"; coordinates: Ring[] | Ring[][] };
+
+const rows = regions.map((region) => ({ ...region, observation: latest(region.slug) }));
+const values = rows.map((row) => Number(row.observation.value));
+const minimum = Math.min(...values);
+const maximum = Math.max(...values);
+const width = 820;
+const height = 560;
+const padding = 18;
+
+function polygons(geometry: Geometry): Ring[][] {
+  return geometry.type === "Polygon" ? [geometry.coordinates as Ring[]] : geometry.coordinates as Ring[][];
+}
+
+const allPoints = mapData.features.flatMap((feature) => polygons(feature.geometry as Geometry).flat(2));
+const minLon = Math.min(...allPoints.map(([lon]) => lon));
+const maxLon = Math.max(...allPoints.map(([lon]) => lon));
+const minLat = Math.min(...allPoints.map(([, lat]) => lat));
+const maxLat = Math.max(...allPoints.map(([, lat]) => lat));
+const scale = Math.min((width - padding * 2) / (maxLon - minLon), (height - padding * 2) / (maxLat - minLat));
+const offsetX = (width - (maxLon - minLon) * scale) / 2;
+const offsetY = (height - (maxLat - minLat) * scale) / 2;
+
+function point([lon, lat]: Point): Point {
+  return [offsetX + (lon - minLon) * scale, offsetY + (maxLat - lat) * scale];
+}
+
+function path(geometry: Geometry): string {
+  return polygons(geometry).map((polygon) => polygon.map((ring) => `${ring.map((coordinate, index) => `${index === 0 ? "M" : "L"}${point(coordinate).map((value) => value.toFixed(1)).join(",")}`).join(" ")} Z`).join(" ")).join(" ");
+}
+
+function level(value: string | null): number {
+  if (value === null) return 0;
+  return Math.min(5, Math.max(1, Math.ceil(((Number(value) - minimum) / Math.max(maximum - minimum, 0.1)) * 5)));
+}
+
+const mapRows = mapData.features.flatMap((feature) => {
+  const row = rows.find((candidate) => candidate.name.toLowerCase() === feature.properties.name.toLowerCase());
+  return row ? [{ ...row, path: path(feature.geometry as Geometry), level: level(row.observation.value) }] : [];
+});
+const first = mapRows[0];
+---
+
+<section class="regional-map" aria-labelledby="regional-map-title">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Explore by place</p>
+      <h2 id="regional-map-title">Where is inflation changing fastest?</h2>
+    </div>
+    <p class="map-period">{formatPeriod(snapshot.latestPeriod)}</p>
+  </div>
+  <p class="map-intro">Select a region on the map or use the table below. This release contains regional data; city and municipality values are not available yet.</p>
+
+  <div class="map-layout">
+    <div class="map-frame">
+      <svg class="regional-map-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="regional-map-title regional-map-description">
+        <desc id="regional-map-description">A choropleth map of Philippine regions with available headline inflation data. Use Tab to move between regions.</desc>
+        {mapRows.map((row) => <path
+          class={`map-region map-level-${row.level}`}
+          d={row.path}
+          data-map-region={row.slug}
+          data-name={row.name}
+          data-value={`${row.observation.value}%`}
+          data-href={`/regions/${row.slug}/inflation/`}
+          tabindex="0"
+          role="button"
+          aria-label={`${row.name}: ${row.observation.value}%`}
+          aria-pressed="false"
+        />)}
+      </svg>
+      <div class="map-legend" aria-label="Inflation rate legend">
+        <span>Lower</span><i class="map-swatch map-level-1"></i><i class="map-swatch map-level-2"></i><i class="map-swatch map-level-3"></i><i class="map-swatch map-level-4"></i><i class="map-swatch map-level-5"></i><span>Higher</span>
+      </div>
+      <p class="map-source">Source: <a href={snapshot.source.url}>PSA OpenSTAT</a>. Boundaries: simplified <a href="https://github.com/bendlikeabamboo/barangay-boundaries-repository">PSA/NAMRIA PSGC snapshot</a> (MIT); NIR is listed in the table while its current outline is being aligned.</p>
+    </div>
+
+    <aside class="map-detail" aria-live="polite" aria-labelledby="map-detail-title">
+      <p class="eyebrow">Selected region</p>
+      <h3 id="map-detail-title">{first?.name}</h3>
+      <strong class="map-detail-value" id="map-detail-value">{first?.observation.value}%</strong>
+      <p id="map-detail-period">Headline inflation in {formatPeriod(snapshot.latestPeriod)}.</p>
+      <a id="map-detail-link" href={`/regions/${first?.slug}/inflation/`}>Open regional history →</a>
+    </aside>
+  </div>
+
+  <noscript><p class="callout">JavaScript is disabled. Use the comparison table below to browse every published region.</p></noscript>
+</section>
+
+<script>
+  const map = document.querySelector(".regional-map");
+  const detailTitle = map?.querySelector("#map-detail-title");
+  const detailValue = map?.querySelector("#map-detail-value");
+  const detailPeriod = map?.querySelector("#map-detail-period");
+  const detailLink = map?.querySelector("#map-detail-link");
+  const period = map?.querySelector(".map-period")?.textContent?.trim() ?? "the latest period";
+
+  function selectRegion(target: Element) {
+    map?.querySelectorAll("[data-map-region]").forEach((region) => region.setAttribute("aria-pressed", String(region === target)));
+    if (detailTitle) detailTitle.textContent = target.getAttribute("data-name");
+    if (detailValue) detailValue.textContent = target.getAttribute("data-value");
+    if (detailPeriod) detailPeriod.textContent = `Headline inflation in ${period}.`;
+    if (detailLink) detailLink.setAttribute("href", target.getAttribute("data-href") ?? "#");
+  }
+
+  map?.querySelectorAll("[data-map-region]").forEach((region) => {
+    region.addEventListener("click", () => selectRegion(region));
+    region.addEventListener("keydown", (event) => {
+      const keyboardEvent = event as KeyboardEvent;
+      if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") { keyboardEvent.preventDefault(); selectRegion(region); }
+    });
+  });
+</script>

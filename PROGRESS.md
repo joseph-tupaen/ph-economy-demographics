@@ -43,5 +43,14 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - Reference review completed: Our World in Data’s map explorer emphasizes a clear indicator control, map/table alternatives, selected-area detail, and source context; mapaPH/Lens demonstrates lightweight Philippines GeoJSON, PSGC-based joins, and drill-down patterns. ([Our World in Data](https://ourworldindata.org/explorers/population-and-demography?tab=map), [mapaPH Lens](https://lens.mapaph.com/))
 - Planned implementation: static, dependency-free SVG/GeoJSON choropleth using vendored MIT-licensed regional boundaries, keyboard-accessible region buttons, a visible legend, a selected-region detail panel, and a linked table fallback.
 - Important data boundary: the current published PSA inflation snapshot has regional observations only; city/municipality values are not available yet. The map must label this clearly and avoid presenting city-level data until a city-level source is ingested and validated.
-- Geometry research found current 2023 boundary assets and a separate NIR-aligned open-source map project; the next session must choose and document one 18-region-compatible asset before coding. No map code or boundary asset was added in this session.
-- Paused before implementation at the user’s request; working tree remains clean and the latest repository commit is `442541f`.
+- Geometry research found current 2023 boundary assets and a separate NIR-aligned open-source map project; the implementation uses the MIT-licensed 17-region snapshot and keeps NIR in the table fallback until a current boundary is aligned.
+- The map implementation is locally verified but not yet committed because `.git` became read-only in this resumed session; the last committed repository revision is `442541f`.
+
+## Map implementation checkpoint
+
+- Added a dependency-free SVG choropleth to `/compare/regions/` with five-step legend, hover/focus states, keyboard selection, selected-region detail panel, source link, and the existing table fallback.
+- Added a minimized 17-feature regional geometry asset (~380 KB) with attribution to the MIT-licensed `bendlikeabamboo/barangay-boundaries-repository` release.
+- Explicitly labels that the published PSA snapshot has regional values only; city/municipality values are not shown.
+- Verification: native Node TypeScript tests 8/8, `npm run check` zero diagnostics, `npm run build` 25 pages, all internal links resolve, and map coverage reports 17 mapped regions plus the expected NIR boundary gap.
+- Remaining before publishing this slice: resolve or formally accept the NIR boundary asset gap, then run the GitHub CI check and perform real-browser visual testing when tooling is available.
+- Current environment limitation: implementation files are present and verified locally, but `.git` is read-only in this resumed session, so the map commit/push could not be created. Run `git add ... && git commit -m "feat: add interactive regional inflation map" && git push` when Git write access is available.

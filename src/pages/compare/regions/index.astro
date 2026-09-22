@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
+import RegionMap from "../../../components/RegionMap.astro";
 import { formatPeriod, latest, regions, snapshot } from "../../../lib/site.ts";
 
 const rows = regions.map((region) => ({ ...region, observation: latest(region.slug) }))
@@ -11,6 +12,8 @@ const maximum = Math.max(...rows.map((row) => Number(row.observation.value)), 1)
   <p class="eyebrow">Same period · Same definition</p>
   <h1>Inflation by region</h1>
   <p class="lede">A direct comparison of all 18 regions for {formatPeriod(snapshot.latestPeriod)}. Higher inflation means prices rose faster than a year earlier; it does not mean a region has the highest prices.</p>
+
+  <RegionMap />
 
   <div class="table-scroll"><table>
     <thead><tr><th scope="col">Region</th><th scope="col">Inflation rate</th></tr></thead>
