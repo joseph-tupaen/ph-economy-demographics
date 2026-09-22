@@ -12,6 +12,7 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - Published `main` to the official public repository; current implementation commit before this progress update is `89c7f6a`.
 - Configured GitHub Actions to remain read-only by default while allowing the ingestion workflow to create review pull requests.
 - Replaced the hardcoded robots sitemap URL with a build-time route driven by `SITE_URL` and updated Actions to the Node 24 runtime (`checkout@v7`, `setup-node@v7`).
+- Excluded Markdown-only pushes and pull requests from CI to avoid spending runner minutes on documentation changes.
 
 ## Verified
 
@@ -21,6 +22,7 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - `npm audit`: 0 known vulnerabilities after upgrading to Astro 7.3.3.
 - GitHub `Checks` run `35696318243`: passed on the published `main` branch.
 - GitHub `Checks` run `35696521065`: passed for the latest pushed progress commit `a576ba4`.
+- GitHub `Checks` run `35696673405`: passed for the final workflow change `c933a29`.
 - GitHub ingestion run `35696410855`: live PSA fetch, validation, tests, checks, and build passed; correctly reported no new validated release.
 - Production output: 25 pages, about 400 KB total, with no client-side script bundles.
 - Static integrity check: all internal links across 25 generated HTML files resolve.
