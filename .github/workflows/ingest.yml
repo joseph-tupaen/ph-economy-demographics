@@ -1,0 +1,46 @@
+name: Check for PSA inflation update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 2 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    env:
+      ASTRO_TELEMETRY_DISABLED: "1"
+      GH_TOKEN: ${{ github.token }}
+      SITE_URL: https://example.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run ingest
+      - run: npm test
+      - run: npm run check
+      - run: npm run build
+      - name: Open review pull request
+        shell: bash
+        run: |
+          if git diff --quiet -- data; then
+            echo "No new validated release."
+            exit 0
+          fi
+          period=$(node -p "require('./data/snapshots/inflation.json').latestPeriod")
+          hash=$(node -p "require('./data/snapshots/inflation.json').source.contentHash.slice(0, 12)")
+          branch="automation/psa-${period}-${hash}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add data
+          git commit -m "data: add PSA inflation release for ${period}"
+          git push -u origin "$branch"
+          gh pr create --base "$GITHUB_REF_NAME" --head "$branch" --title "PSA inflation update: ${period}" --body "Automated import passed validation, tests, type checks, and the production build. Review the data diff and preview before merging."
