@@ -34,5 +34,13 @@ export function makeSocialDraft(facts: SocialFacts): string {
   const date = new Intl.DateTimeFormat("en-PH", { month: "long", year: "numeric", timeZone: "UTC" })
     .format(new Date(`${facts.referencePeriod}-01T00:00:00Z`));
   const yearAgo = facts.yearAgoValue ? ` and ${facts.yearAgoValue}% a year earlier` : "";
-  return `${date} inflation update\n\nThe official headline inflation rate was ${facts.value}% in ${date}, compared with ${facts.previousValue}% in the previous month${yearAgo}.\n\nSource: ${facts.sourceName}. ${facts.sourceUrl}`;
+  return `---\nstatus: pending_review\nreference_period: ${facts.referencePeriod}\n---\n\n${date} inflation update\n\nThe official headline inflation rate was ${facts.value}% in ${date}, compared with ${facts.previousValue}% in the previous month${yearAgo}.\n\nSource: ${facts.sourceName}. ${facts.sourceUrl}`;
+}
+
+export function assertSocialDraftClaims(facts: SocialFacts, draft: string): void {
+  const actual = [...draft.matchAll(/-?\d+(?:\.\d+)?%/g)].map(([claim]) => claim);
+  const expected = [facts.value, facts.previousValue, facts.yearAgoValue]
+    .filter((value): value is string => value !== null)
+    .map((value) => `${value}%`);
+  if (actual.join("|") !== expected.join("|")) throw new Error("Social draft numeric claims do not match approved facts");
 }

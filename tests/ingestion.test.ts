@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { addNationalCategories, buildSnapshot, decodePsaJson, validateSnapshot } from "../src/lib/data/ingestion.ts";
-import { makeSocialDraft, socialFacts } from "../src/lib/data/social.ts";
+import { assertSocialDraftClaims, makeSocialDraft, socialFacts } from "../src/lib/data/social.ts";
 import type { JsonStatDataset } from "../src/lib/data/types.ts";
 
 const fixturePath = new URL("./fixtures/psa-openstat/regional.json", import.meta.url);
@@ -114,5 +114,8 @@ test("social draft contains only facts supplied by the snapshot", async () => {
 
   assert.match(draft, /4\.1%/);
   assert.match(draft, /3\.9%/);
+  assert.match(draft, /status: pending_review/);
   assert.doesNotMatch(draft, /5\.0%/);
+  assert.doesNotThrow(() => assertSocialDraftClaims(facts, draft));
+  assert.throws(() => assertSocialDraftClaims(facts, draft.replace("4.1%", "4.2%")), /numeric claims/);
 });

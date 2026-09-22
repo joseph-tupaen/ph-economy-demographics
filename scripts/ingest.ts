@@ -5,7 +5,7 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { basename, resolve } from "node:path";
 import { addNationalCategories, buildSnapshot, decodePsaJson, validateSnapshot } from "../src/lib/data/ingestion.ts";
 import { GEOGRAPHIES, PSA_API_URL } from "../src/lib/data/config.ts";
-import { makeSocialDraft, socialFacts } from "../src/lib/data/social.ts";
+import { assertSocialDraftClaims, makeSocialDraft, socialFacts } from "../src/lib/data/social.ts";
 import type { JsonStatDataset, PsaJsonResponse, PsaMetadata, Release, Snapshot } from "../src/lib/data/types.ts";
 
 const gzipAsync = promisify(gzip);
@@ -112,9 +112,12 @@ async function main(): Promise<void> {
   const draftDirectory = resolve(root, "data/drafts");
   await Promise.all([rawDirectory, snapshotDirectory, releaseDirectory, draftDirectory].map((path) => mkdir(path, { recursive: true })));
   const stamp = retrievedAt.replace(/[:.]/g, "-");
+  const facts = socialFacts(snapshot);
+  const draft = makeSocialDraft(facts);
+  assertSocialDraftClaims(facts, draft);
   await atomicWrite(resolve(rawDirectory, `${stamp}-${snapshot.source.contentHash.slice(0, 12)}.json.gz`), await gzipAsync(raw));
   await atomicWrite(resolve(releaseDirectory, `${snapshot.latestPeriod}.json`), `${JSON.stringify(releaseFor(snapshot), null, 2)}\n`);
-  await atomicWrite(resolve(draftDirectory, `${snapshot.latestPeriod}.md`), `${makeSocialDraft(socialFacts(snapshot))}\n`);
+  await atomicWrite(resolve(draftDirectory, `${snapshot.latestPeriod}.md`), `${draft}\n`);
   await atomicWrite(resolve(snapshotDirectory, "inflation.json"), `${JSON.stringify(snapshot, null, 2)}\n`);
 
   process.stdout.write(`Prepared ${snapshot.latestPeriod}: ${snapshot.observations.length} observations.\n`);
