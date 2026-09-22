@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { formatPeriod, snapshot } from "../../lib/site.ts";
+---
+
+<BaseLayout title="Data Sources and Update Status" description="See the official PSA dataset, retrieval date, current reference period, and integrity hash used by PH Economic Updates.">
+  <p class="eyebrow">Provenance and freshness</p>
+  <h1>Data source</h1>
+  <p class="lede">Every published value currently comes from one pinned Philippine Statistics Authority OpenSTAT table.</p>
+
+  <dl>
+    <dt><strong>Agency</strong></dt><dd>{snapshot.source.agency}</dd>
+    <dt><strong>Dataset</strong></dt><dd>{snapshot.source.dataset}</dd>
+    <dt><strong>Table ID</strong></dt><dd><code>{snapshot.source.tableId}</code></dd>
+    <dt><strong>Latest reference period</strong></dt><dd>{formatPeriod(snapshot.latestPeriod)}</dd>
+    <dt><strong>Retrieved</strong></dt><dd><time datetime={snapshot.source.retrievedAt}>{new Date(snapshot.source.retrievedAt).toLocaleString("en-PH", { timeZone: "Asia/Manila" })}</time></dd>
+    <dt><strong>SHA-256 evidence hash</strong></dt><dd><code>{snapshot.source.contentHash}</code></dd>
+  </dl>
+
+  <p><a href={snapshot.source.url}>Open the official PSA API endpoint →</a></p>
+  <div class="callout"><strong>Update status:</strong> The site serves the last reviewed snapshot. If PSA is unavailable or validation fails, the previous verified data stays online.</div>
+</BaseLayout>

@@ -1,0 +1,44 @@
+---
+import TrendChart from "../../components/TrendChart.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { change, formatPeriod, history, latest, snapshot } from "../../lib/site.ts";
+
+const nationalHistory = history("philippines");
+const current = latest("philippines");
+const previous = nationalHistory.at(-2);
+const categories = snapshot.observations
+  .filter((item) => item.geography === "philippines" && item.period === snapshot.latestPeriod && item.category !== "all-items" && item.value !== null)
+  .sort((a, b) => Number(b.value) - Number(a.value));
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  name: "Philippines headline inflation rate",
+  description: "Monthly year-on-year change in the Consumer Price Index for all income households.",
+  temporalCoverage: `${nationalHistory[0]?.period}/${snapshot.latestPeriod}`,
+  creator: { "@type": "Organization", name: "Philippine Statistics Authority" },
+  url: new URL("/inflation/", Astro.site ?? Astro.url).href,
+}).replace(/</g, "\\u003c");
+---
+
+<BaseLayout title="Philippines Inflation Rate" description={`The official Philippines headline inflation rate was ${current.value}% in ${formatPeriod(current.period)}. View history, categories, and methodology.`}>
+  <script type="application/ld+json" set:html={structuredData} />
+  <p class="eyebrow">Philippines · Headline inflation</p>
+  <h1>{current.value}% in {formatPeriod(current.period)}</h1>
+  <p class="lede">{change(current, previous)}. Inflation (<em>antas ng pagtaas ng presyo</em>) is the year-on-year change in the Consumer Price Index—not the price level itself.</p>
+
+  <h2>National trend</h2>
+  <TrendChart observations={nationalHistory} label="Philippines monthly headline inflation" />
+
+  {categories.length > 0 && <section aria-labelledby="categories-heading">
+    <h2 id="categories-heading">Major spending categories</h2>
+    <p>Year-on-year inflation for broad CPI groups in the same reference period.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th scope="col">Category</th><th scope="col">Rate</th></tr></thead>
+      <tbody>{categories.map((item) => <tr><th scope="row">{item.categoryName}</th><td>{item.value}%</td></tr>)}</tbody>
+    </table></div>
+  </section>}
+
+  <aside class="provenance">
+    <strong>About this figure.</strong> Unit: percent, year-on-year. Base year: 2018. Reference period: {formatPeriod(current.period)}. Retrieved {new Date(snapshot.source.retrievedAt).toLocaleDateString("en-PH", { timeZone: "Asia/Manila" })}. <a href={snapshot.source.url}>Official PSA source</a> · <a href="/methodology/">How to read this</a>
+  </aside>
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import TrendChart from "../../../components/TrendChart.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { change, formatPeriod, history, latest, regions, snapshot } from "../../../lib/site.ts";
+
+export function getStaticPaths() {
+  return regions.map((region) => ({ params: { region: region.slug }, props: { region } }));
+}
+
+const { region } = Astro.props;
+const regionalHistory = history(region.slug);
+const current = latest(region.slug);
+const previous = regionalHistory.at(-2);
+const national = latest("philippines");
+const gap = Math.round((Number(current.value) - Number(national.value)) * 10) / 10;
+---
+
+<BaseLayout title={`${region.name} Inflation Rate`} description={`Official monthly inflation history for ${region.name}, compared with the Philippines rate and linked to PSA data.`}>
+  <p class="eyebrow">Regional inflation</p>
+  <h1>{region.name}</h1>
+  <p class="lede"><strong>{current.value}%</strong> in {formatPeriod(current.period)} — {change(current, previous)}. This was {Math.abs(gap).toFixed(1)} percentage points {gap >= 0 ? "above" : "below"} the national rate of {national.value}%.</p>
+
+  <h2>Regional trend</h2>
+  <TrendChart observations={regionalHistory} label={`${region.name} monthly headline inflation`} />
+
+  <aside class="provenance">
+    <strong>Official series.</strong> PSA OpenSTAT table {snapshot.source.tableId}. Values are year-on-year percent changes for all items and all income households. <a href={snapshot.source.url}>View source</a>.
+  </aside>
+</BaseLayout>

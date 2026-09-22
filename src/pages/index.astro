@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { change, formatPeriod, history, latest, regions, snapshot } from "../lib/site.ts";
+
+const nationalHistory = history("philippines");
+const current = latest("philippines");
+const previous = nationalHistory.at(-2);
+---
+
+<BaseLayout title="PH Economic Updates — Philippine inflation, clearly explained" description="Track official Philippine inflation nationally and across every region, with source links and update dates.">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Official data · Plain language</p>
+      <h1>What changed in the cost of living?</h1>
+      <p class="lede">Monthly inflation updates for the Philippines and every region, based on Philippine Statistics Authority data. Walang hula—official figures with their source and date.</p>
+      <p><a href="/inflation/"><strong>Explore the national trend →</strong></a></p>
+    </div>
+    <div class="metric" aria-label={`National inflation was ${current.value} percent in ${formatPeriod(current.period)}`}>
+      <span class="metric-value">{current.value}%</span>
+      <span class="metric-label">National headline inflation</span>
+      <p class="metric-note">{formatPeriod(current.period)} · {change(current, previous)}</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="regions-heading">
+    <div class="section-heading">
+      <div><p class="eyebrow">Local view</p><h2 id="regions-heading">Inflation in your region</h2></div>
+      <a href="/compare/regions/">Compare all regions</a>
+    </div>
+    <div class="region-grid">
+      {regions.map((region) => <a href={`/regions/${region.slug}/inflation/`}>{region.name}<br /><small>{latest(region.slug).value}% latest</small></a>)}
+    </div>
+  </section>
+
+  <aside class="provenance">
+    <strong>Source you can check.</strong> PSA OpenSTAT table {snapshot.source.tableId}, retrieved <time datetime={snapshot.source.retrievedAt}>{new Date(snapshot.source.retrievedAt).toLocaleString("en-PH", { timeZone: "Asia/Manila" })}</time>. <a href={snapshot.source.url}>Open the official dataset</a>.
+  </aside>
+</BaseLayout>

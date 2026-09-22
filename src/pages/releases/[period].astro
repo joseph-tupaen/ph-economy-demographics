@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { readFileSync, readdirSync } from "node:fs";
+import { formatPeriod } from "../../lib/site.ts";
+import type { Release } from "../../lib/data/types.ts";
+
+export function getStaticPaths() {
+  const directory = new URL("../../../data/releases/", import.meta.url);
+  return readdirSync(directory).filter((file) => file.endsWith(".json")).map((file) => {
+    const release = JSON.parse(readFileSync(new URL(file, directory), "utf8")) as Release;
+    return { params: { period: release.period }, props: { release } };
+  });
+}
+
+const { release } = Astro.props as { release: Release };
+const period = release.period;
+const observation = release.observations.find((item) => item.geography === "philippines" && item.category === "all-items" && item.period === period)!;
+const revised = release.revisions.filter((item) => item.includes(`/${period}:`));
+---
+
+<BaseLayout title={`Philippines Inflation Update — ${formatPeriod(period)}`} description={`The official Philippines headline inflation rate was ${observation.value}% in ${formatPeriod(period)}.`}>
+  <p class="eyebrow">Permanent release snapshot</p>
+  <h1>{formatPeriod(period)}</h1>
+  <p class="lede">The official headline inflation rate for the Philippines was <strong>{observation.value}%</strong>.</p>
+  {revised.length > 0 ? <div class="callout"><strong>Revision recorded:</strong><ul>{revised.map((item) => <li>{item}</li>)}</ul></div> : <p>No revision is recorded in the current snapshot for this period.</p>}
+  <aside class="provenance">Source: <a href={release.source.url}>Philippine Statistics Authority OpenSTAT</a>. Unit: year-on-year percent change.</aside>
+</BaseLayout>

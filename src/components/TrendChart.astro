@@ -1,0 +1,43 @@
+---
+import type { Observation } from "../lib/data/types.ts";
+
+interface Props { observations: Observation[]; label: string; }
+const { observations, label } = Astro.props;
+const recent = observations.slice(-24);
+const values = recent.map((item) => Number(item.value));
+const minimum = Math.min(...values);
+const maximum = Math.max(...values);
+const range = maximum - minimum || 1;
+const width = 720;
+const height = 260;
+const pad = 28;
+const points = recent.map((item, index) => {
+  const x = pad + (index * (width - pad * 2)) / Math.max(recent.length - 1, 1);
+  const y = height - pad - ((Number(item.value) - minimum) / range) * (height - pad * 2);
+  return `${x},${y}`;
+}).join(" ");
+---
+
+<figure class="chart">
+  <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="chart-title chart-description">
+    <title id="chart-title">{label}</title>
+    <desc id="chart-description">Inflation values from {recent[0]?.period} to {recent.at(-1)?.period}. A data table follows.</desc>
+    <line x1={pad} y1={height - pad} x2={width - pad} y2={height - pad} class="axis" />
+    <polyline points={points} class="trend-line" />
+    {recent.map((item, index) => {
+      const [x, y] = points.split(" ")[index].split(",");
+      return <circle cx={x} cy={y} r="4"><title>{item.period}: {item.value}%</title></circle>;
+    })}
+  </svg>
+  <figcaption>Last {recent.length} published monthly observations. Hover or use the table for exact values.</figcaption>
+</figure>
+
+<details class="data-details">
+  <summary>View chart data</summary>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th scope="col">Period</th><th scope="col">Inflation rate</th></tr></thead>
+      <tbody>{recent.toReversed().map((item) => <tr><th scope="row">{item.period}</th><td>{item.value}%</td></tr>)}</tbody>
+    </table>
+  </div>
+</details>

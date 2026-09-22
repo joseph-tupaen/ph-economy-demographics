@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Methodology — Understanding Philippine Inflation" description="Plain-language definitions, calculations, update cadence, and limitations for PH Economic Updates.">
+  <p class="eyebrow">How to read the numbers</p>
+  <h1>Inflation, without the jargon</h1>
+  <p class="lede">This site republishes selected official PSA figures. It does not forecast prices or replace PSA releases.</p>
+
+  <div class="two-column">
+    <section><h2>What inflation means</h2><p>Inflation is the percentage change in the Consumer Price Index compared with the same month one year earlier. Sa madaling salita, sinusukat nito kung gaano kabilis nagbabago ang average na presyo ng karaniwang basket ng bilihin at serbisyo.</p></section>
+    <section><h2>Percentage points</h2><p>If inflation moves from 4.0% to 5.0%, it increased by <strong>1.0 percentage point</strong>, not by one percent. Comparisons on this site use percentage points.</p></section>
+  </div>
+
+  <h2>What the data does not say</h2>
+  <ul>
+    <li>A lower inflation rate does not mean prices returned to their old level; it means prices increased more slowly.</li>
+    <li>Regional inflation rates do not directly compare the cost of living between regions.</li>
+    <li>One month does not establish a trend or explain why prices changed.</li>
+  </ul>
+
+  <h2>Processing rules</h2>
+  <p>Values are stored at the precision published by PSA. Missing or suppressed entries remain missing and are never treated as zero. New data is published only after configured regions, periods, labels, and values pass validation. Historical changes are recorded as revisions.</p>
+</BaseLayout>

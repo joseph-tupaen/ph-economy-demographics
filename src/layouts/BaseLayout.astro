@@ -1,0 +1,53 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+}
+
+const { title, description, canonical = Astro.url.pathname } = Astro.props;
+const canonicalUrl = new URL(canonical, Astro.site ?? Astro.url);
+---
+
+<!doctype html>
+<html lang="en-PH">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#0b3155" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="/" aria-label="PH Economic Updates home">
+          <span class="brand-mark" aria-hidden="true">PH</span>
+          <span>Economic Updates</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="/inflation/">Inflation</a>
+          <a href="/compare/regions/">Regions</a>
+          <a href="/methodology/">Methodology</a>
+          <a href="/sources/">Sources</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="shell"><slot /></main>
+    <footer>
+      <div class="shell footer-inner">
+        <p><strong>PH Economic Updates</strong><br />Official data, explained plainly.</p>
+        <p>Independent public-interest project. Data remains owned and published by the Philippine Statistics Authority.</p>
+      </div>
+    </footer>
+  </body>
+</html>

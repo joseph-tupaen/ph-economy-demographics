@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { formatPeriod, latest, regions, snapshot } from "../../../lib/site.ts";
+
+const rows = regions.map((region) => ({ ...region, observation: latest(region.slug) }))
+  .sort((a, b) => Number(b.observation.value) - Number(a.observation.value));
+const maximum = Math.max(...rows.map((row) => Number(row.observation.value)), 1);
+---
+
+<BaseLayout title="Inflation by Region — Philippines" description={`Compare official headline inflation rates across all Philippine regions for ${formatPeriod(snapshot.latestPeriod)}.`}>
+  <p class="eyebrow">Same period · Same definition</p>
+  <h1>Inflation by region</h1>
+  <p class="lede">A direct comparison of all 18 regions for {formatPeriod(snapshot.latestPeriod)}. Higher inflation means prices rose faster than a year earlier; it does not mean a region has the highest prices.</p>
+
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Region</th><th scope="col">Inflation rate</th></tr></thead>
+    <tbody>{rows.map((row) => <tr>
+      <th scope="row"><a href={`/regions/${row.slug}/inflation/`}>{row.name}</a></th>
+      <td><span class="comparison-bar" style={`width:${Math.max((Number(row.observation.value) / maximum) * 10, 0.25)}rem`} aria-hidden="true"></span>{row.observation.value}%</td>
+    </tr>)}</tbody>
+  </table></div>
+
+  <aside class="provenance">Source: <a href={snapshot.source.url}>Philippine Statistics Authority OpenSTAT</a>. Reference period: {formatPeriod(snapshot.latestPeriod)}.</aside>
+</BaseLayout>
