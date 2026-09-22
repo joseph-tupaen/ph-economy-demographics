@@ -1,0 +1,270 @@
+{
+  "source": {
+    "agency": "Philippine Statistics Authority",
+    "dataset": "Year-on-Year Changes of the Consumer Price Index in Percent by Commodity Group (2018=100): January 2019 - August 2026",
+    "tableId": "0012M4ACP23.px",
+    "url": "https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP23.px",
+    "retrievedAt": "2026-09-22T04:04:30.499Z",
+    "contentHash": "b670f958fc76927d9095c0f9adde9539bc067b8f1673c1289d628fe842be0bf1"
+  },
+  "period": "2026-08",
+  "observations": [
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "6.1"
+    },
+    {
+      "geography": "ncr",
+      "geographyName": "National Capital Region (NCR)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "4.1"
+    },
+    {
+      "geography": "car",
+      "geographyName": "Cordillera Administrative Region (CAR)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "6.8"
+    },
+    {
+      "geography": "ilocos-region",
+      "geographyName": "Region I (Ilocos Region)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "4.6"
+    },
+    {
+      "geography": "cagayan-valley",
+      "geographyName": "Region II (Cagayan Valley)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "6.8"
+    },
+    {
+      "geography": "central-luzon",
+      "geographyName": "Region III (Central Luzon)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "5.8"
+    },
+    {
+      "geography": "calabarzon",
+      "geographyName": "Region IV-A (CALABARZON)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "5.6"
+    },
+    {
+      "geography": "mimaropa",
+      "geographyName": "MIMAROPA Region",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "5.4"
+    },
+    {
+      "geography": "bicol-region",
+      "geographyName": "Region V (Bicol Region)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "7.7"
+    },
+    {
+      "geography": "western-visayas",
+      "geographyName": "Region VI (Western Visayas)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "8.4"
+    },
+    {
+      "geography": "central-visayas",
+      "geographyName": "Region VII (Central Visayas)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "8.1"
+    },
+    {
+      "geography": "eastern-visayas",
+      "geographyName": "Region VIII (Eastern Visayas)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "8.4"
+    },
+    {
+      "geography": "zamboanga-peninsula",
+      "geographyName": "Region IX (Zamboanga Peninsula)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "7.6"
+    },
+    {
+      "geography": "northern-mindanao",
+      "geographyName": "Region X (Northern Mindanao)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "6.5"
+    },
+    {
+      "geography": "davao-region",
+      "geographyName": "Region XI (Davao Region)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "8.9"
+    },
+    {
+      "geography": "soccsksargen",
+      "geographyName": "Region XII (SOCCSKSARGEN)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "7.6"
+    },
+    {
+      "geography": "barmm",
+      "geographyName": "Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "8.8"
+    },
+    {
+      "geography": "caraga",
+      "geographyName": "Region XIII (Caraga)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "8.9"
+    },
+    {
+      "geography": "negros-island-region",
+      "geographyName": "Negros Island Region (NIR)",
+      "category": "all-items",
+      "categoryName": "All items",
+      "period": "2026-08",
+      "value": "5.8"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "01",
+      "categoryName": "Food And Non-alcoholic Beverages",
+      "period": "2026-08",
+      "value": "4.6"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "02",
+      "categoryName": "Alcoholic Beverages And Tobacco",
+      "period": "2026-08",
+      "value": "6.3"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "03",
+      "categoryName": "Clothing And Footwear",
+      "period": "2026-08",
+      "value": "3.1"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "04",
+      "categoryName": "Housing, Water, Electricity, Gas, And Other Fuels",
+      "period": "2026-08",
+      "value": "7.9"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "05",
+      "categoryName": "Furnishings, Household Equipment And Routine Household Maintenance",
+      "period": "2026-08",
+      "value": "4.1"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "06",
+      "categoryName": "Health",
+      "period": "2026-08",
+      "value": "5.0"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "07",
+      "categoryName": "Transport",
+      "period": "2026-08",
+      "value": "13.5"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "08",
+      "categoryName": "Information And Communication",
+      "period": "2026-08",
+      "value": "1.0"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "09",
+      "categoryName": "Recreation, Sport And Culture",
+      "period": "2026-08",
+      "value": "5.1"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "10",
+      "categoryName": "Education Services",
+      "period": "2026-08",
+      "value": "1.7"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "11",
+      "categoryName": "Restaurants And Accommodation Services",
+      "period": "2026-08",
+      "value": "6.8"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "12",
+      "categoryName": "Financial Services",
+      "period": "2026-08",
+      "value": "0.0"
+    },
+    {
+      "geography": "philippines",
+      "geographyName": "Philippines",
+      "category": "13",
+      "categoryName": "Personal Care, And Miscellaneous Goods And Services",
+      "period": "2026-08",
+      "value": "3.9"
+    }
+  ],
+  "revisions": []
+}
