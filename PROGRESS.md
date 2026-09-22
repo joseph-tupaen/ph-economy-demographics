@@ -36,3 +36,12 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - Connect the official GitHub repository to Cloudflare Pages (`npm run build`, output directory `dist`).
 - Visually check the production preview at 320px, 768px, 1024px, and 1440px. Chrome DevTools/browser tooling was unavailable in the implementation environment, so this has not been claimed as verified.
 - Add a deterministic Facebook-ready PNG card only when an image renderer is selected; automatic Facebook publishing remains intentionally deferred until approvals and credentials are available.
+
+## Paused map task
+
+- Requested next slice: an interactive national Philippines map with understandable region selection and data panels.
+- Reference review completed: Our World in Data’s map explorer emphasizes a clear indicator control, map/table alternatives, selected-area detail, and source context; mapaPH/Lens demonstrates lightweight Philippines GeoJSON, PSGC-based joins, and drill-down patterns. ([Our World in Data](https://ourworldindata.org/explorers/population-and-demography?tab=map), [mapaPH Lens](https://lens.mapaph.com/))
+- Planned implementation: static, dependency-free SVG/GeoJSON choropleth using vendored MIT-licensed regional boundaries, keyboard-accessible region buttons, a visible legend, a selected-region detail panel, and a linked table fallback.
+- Important data boundary: the current published PSA inflation snapshot has regional observations only; city/municipality values are not available yet. The map must label this clearly and avoid presenting city-level data until a city-level source is ingested and validated.
+- Geometry research found current 2023 boundary assets and a separate NIR-aligned open-source map project; the next session must choose and document one 18-region-compatible asset before coding. No map code or boundary asset was added in this session.
+- Paused before implementation at the user’s request; working tree remains clean and the latest repository commit is `442541f`.
