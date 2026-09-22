@@ -20,8 +20,10 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - `npm run build`: successful static build.
 - `npm audit`: 0 known vulnerabilities after upgrading to Astro 7.3.3.
 - GitHub `Checks` run `35696318243`: passed on the published `main` branch.
+- GitHub `Checks` run `35696521065`: passed for the latest pushed progress commit `a576ba4`.
 - GitHub ingestion run `35696410855`: live PSA fetch, validation, tests, checks, and build passed; correctly reported no new validated release.
 - Production output: 25 pages, about 400 KB total, with no client-side script bundles.
+- Static integrity check: all internal links across 25 generated HTML files resolve.
 - Generated `robots.txt` and sitemap both use the configured `SITE_URL`.
 
 ## Before production
