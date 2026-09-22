@@ -21,8 +21,8 @@ npm run build
 
 Run `npm run ingest` to fetch and validate the configured PSA dataset. Add `-- --fixture tests/fixtures/psa-openstat/regional.json` to work offline.
 
-The default `SITE_URL` is a placeholder. Set it to the production domain in Cloudflare Pages before launch.
+The default `SITE_URL` is a placeholder. Set it to the production origin in Cloudflare Pages and as a GitHub Actions repository variable before launch; the sitemap, canonical URLs, and `robots.txt` will use it automatically.
 
 ## Deploy
 
-Connect the official repository to Cloudflare Pages with build command `npm run build` and output directory `dist`. Set `SITE_URL` to the final HTTPS origin. Merging a validated monthly data pull request triggers the next static deployment.
+Connect the official repository to Cloudflare Pages with build command `npm run build` and output directory `dist`. Merging a validated monthly data pull request triggers the next static deployment.

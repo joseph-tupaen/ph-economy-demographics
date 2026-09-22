@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ASTRO_TELEMETRY_DISABLED: "1"
-      SITE_URL: https://example.com
+      SITE_URL: ${{ vars.SITE_URL || 'https://example.com' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
