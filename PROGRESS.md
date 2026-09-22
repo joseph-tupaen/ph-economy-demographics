@@ -13,6 +13,7 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - Configured GitHub Actions to remain read-only by default while allowing the ingestion workflow to create review pull requests.
 - Replaced the hardcoded robots sitemap URL with a build-time route driven by `SITE_URL` and updated Actions to the Node 24 runtime (`checkout@v7`, `setup-node@v7`).
 - Excluded Markdown-only pushes and pull requests from CI to avoid spending runner minutes on documentation changes.
+- Social drafts now carry machine-readable `pending_review` status and reference period metadata; ingestion rejects a draft when its percentage claims differ from the approved facts.
 
 ## Verified
 
@@ -23,6 +24,7 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - GitHub `Checks` run `35696318243`: passed on the published `main` branch.
 - GitHub `Checks` run `35696521065`: passed for the latest pushed progress commit `a576ba4`.
 - GitHub `Checks` run `35696673405`: passed for the final workflow change `c933a29`.
+- GitHub `Checks` run `35731332955`: passed for social draft validation commit `6690afc`.
 - GitHub ingestion run `35696410855`: live PSA fetch, validation, tests, checks, and build passed; correctly reported no new validated release.
 - Production output: 25 pages, about 400 KB total, with no client-side script bundles.
 - Static integrity check: all internal links across 25 generated HTML files resolve.
@@ -33,3 +35,4 @@ Official repository: <https://github.com/joseph-tupaen/ph-economy-demographics.g
 - Choose the final domain, set `SITE_URL` in Cloudflare Pages, and add the same value as the GitHub Actions repository variable `SITE_URL`.
 - Connect the official GitHub repository to Cloudflare Pages (`npm run build`, output directory `dist`).
 - Visually check the production preview at 320px, 768px, 1024px, and 1440px. Chrome DevTools/browser tooling was unavailable in the implementation environment, so this has not been claimed as verified.
+- Add a deterministic Facebook-ready PNG card only when an image renderer is selected; automatic Facebook publishing remains intentionally deferred until approvals and credentials are available.
